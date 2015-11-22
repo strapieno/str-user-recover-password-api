@@ -18,6 +18,10 @@ class GenerateTokenInputFilterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
+
         /** @var $storage AdapterInterface */
         $storage = $serviceLocator->get('Strapieno\Auth\Model\OAuth2\StorageAdapter');
         $inputFilterManager = $serviceLocator->get('InputFilterManager');
@@ -28,7 +32,7 @@ class GenerateTokenInputFilterFactory implements FactoryInterface
             // TODO exception
         }
 
-        $input = $userDefaultInputFilter->get($storage->getIdentityField();
+        $input = $userDefaultInputFilter->get($storage->getIdentityField());
         $inputFilter = new InputFilter();
         return $inputFilter->add($input);
     }

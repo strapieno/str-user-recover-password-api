@@ -29,7 +29,6 @@ class RpcController extends ApigilityRpcController
             return new ApiProblemModel(new ApiProblem(500, 'Missing InputFilter; cannot validate request'));
         }
 
-        $this->gets
         /** @var $sm ServiceLocatorInterface */
         $sm = $e->getApplication()->getServiceManager();
 
@@ -52,8 +51,8 @@ class RpcController extends ApigilityRpcController
             $user->save();
 
             return [
-                'token' => $user->getRecoverPasswordToken();
-            ]
+                'token' => $user->getRecoverPasswordToken()
+            ];
         }
 
         return new ApiProblemModel(new ApiProblem(404, 'User not found'));
@@ -69,7 +68,7 @@ class RpcController extends ApigilityRpcController
             return new ApiProblemModel(new ApiProblem(500, 'Missing InputFilter; cannot validate request'));
         }
 
-        $sm = $this->getServiceLocator(); >
+        $sm = $this->getServiceLocator();
         $adapter = $this->getOauthStorageAdapter($sm);
 
     }

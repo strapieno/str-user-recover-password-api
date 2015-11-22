@@ -1,21 +1,23 @@
 <?php
 
 return [
-    'routes' => [
-        'api-rpc' => [
-            'type' => 'Literal',
-            'options' => [
-                'route' => '/rpc'
-            ],
-            'child_routes' => [
-                'recover-password' => [
-                    'type' => 'Segment',
-                    'may_terminate' => true,
-                    'options' => [
-                        'route' => '/recover-password',
-                        'defaults' => [
-                            'action' => 'generateToken',
-                            'controller' => 'Strapieno\UserRecoverPassword\Api\V1\RpcController'
+    'router' => [
+        'routes' => [
+            'api-rpc' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/rpc'
+                ],
+                'child_routes' => [
+                    'recover-password' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/recover-password',
+                            'defaults' => [
+                                'controller' => 'Strapieno\UserRecoverPassword\Api\V1\RpcController',
+                                'action' => 'generateToken'
+                            ],
                         ]
                     ]
                 ]
@@ -49,7 +51,7 @@ return [
     ],
     'zf-content-validation' => [
         'Strapieno\UserRecoverPassword\Api\V1\RpcController' => [
-            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\GenerateTokenInputFilter'
+            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter'
         ],
     ],
 ];

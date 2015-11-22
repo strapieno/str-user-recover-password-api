@@ -1,6 +1,6 @@
 <?php
 return [
     'factories' => [
-        'Strapieno\UserRecoverPassword\Api\V1\GenerateTokenInputFilter' => 'Strapieno\UserRecoverPassword\Api\V1\GenerateTokenInputFilterFactory\InputFilterFactory'
+        'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilterFactory'
     ]
 ];
