@@ -3,6 +3,8 @@
 namespace Strapieno\UserRecoverPassword\Api\V1;
 
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
+use Strapieno\ModelUtils\Entity\PasswordAwareInterface;
+use Strapieno\ModelUtils\Entity\RercoverPasswordAwareInterface;
 use Strapieno\User\Model\Criteria\Mongo\UserMongoCollectionCriteria;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\User\Model\UserModelInterface;
@@ -50,6 +52,14 @@ class RpcController extends ApigilityRpcController
         if ($result->count() == 1) {
             /** @var $user UserInterface */
             $user = $result->current();
+            if (!$user instanceof RercoverPasswordAwareInterface) {
+                $message = sprintf(
+                    'Class %s must be an instance of %s',
+                    get_class($user),
+                    'Strapieno\ModelUtils\Entity\RercoverPasswordAwareInterface'
+                );
+                return new ApiProblemModel(new ApiProblem(500, $message);
+            }
             $user->generateRecoverPasswordToken();
             $user->save();
 
@@ -72,8 +82,6 @@ class RpcController extends ApigilityRpcController
         }
 
         $sm = $this->getServiceLocator();
-        $adapter = $this->getOauthStorageAdapter($sm);
-
         $data = $inputFilter->getValues();
 
         $criteria = (new UserMongoCollectionCriteria())->setRecoverPasswordToken($data['token']);
@@ -84,6 +92,15 @@ class RpcController extends ApigilityRpcController
         if ($result->count() == 1) {
             /** @var $user UserInterface */
             $user = $result->current();
+            if (!$user instanceof PasswordAwareInterface) {
+                $message = sprintf(
+                    'Class %s must be an instance of %s',
+                    get_class($user),
+                    'Strapieno\ModelUtils\Entity\PasswordAwareInterface'
+                );
+                return new ApiProblemModel(new ApiProblem(500, $message);
+            }
+
             $user->setPassword($data['password']);
             $user->save();
 
@@ -94,7 +111,7 @@ class RpcController extends ApigilityRpcController
         }
 
         if ($result->count() > 1) {
-            return new ApiProblemModel(new ApiProblem(409, 'Ambitious token'));
+            return new ApiProblemModel(new ApiProblem(409, 'Ambiguous token'));
         }
 
         return new ApiProblemModel(new ApiProblem(404, 'Token not found'));
