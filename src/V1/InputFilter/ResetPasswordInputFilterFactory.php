@@ -6,6 +6,7 @@ use Strapieno\Auth\Model\OAuth2\AdapterInterface;
 use Strapieno\User\Model\InputFilter\DefaultInputFilter;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
+use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -19,6 +20,10 @@ class ResetPasswordInputFilterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
+
         $inputFilterManager = $serviceLocator->get('InputFilterManager');
 
         /** @var $userDefaultInputFilter DefaultInputFilter */
@@ -28,12 +33,14 @@ class ResetPasswordInputFilterFactory implements FactoryInterface
             // TODO exception
         }
 
-        $input = $userDefaultInputFilter->get('password');
         $inputFilter = new InputFilter();
+
+        $input = $userDefaultInputFilter->get('password');
+        $input->setRequired(true);
         // Add input
         $inputFilter->add($input);
 
         $input = (new Input('token'))->setRequired(true);
-        return $input;
+        return $inputFilter->add($input);
     }
 }

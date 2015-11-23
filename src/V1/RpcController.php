@@ -3,13 +3,16 @@
 namespace Strapieno\UserRecoverPassword\Api\V1;
 
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
+use Strapieno\User\Model\Criteria\Mongo\UserMongoCollectionCriteria;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\User\Model\UserModelInterface;
 use Strapieno\User\Model\UserModelService;
 use Zend\Authentication\Storage\StorageInterface;
+use Zend\Http\Response;
 use Zend\InputFilter\InputFilter;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Model\JsonModel;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\View\ApiProblemModel;
 use ZF\Rpc\RpcController as ApigilityRpcController;
@@ -71,6 +74,30 @@ class RpcController extends ApigilityRpcController
         $sm = $this->getServiceLocator();
         $adapter = $this->getOauthStorageAdapter($sm);
 
+        $data = $inputFilter->getValues();
+
+        $criteria = (new UserMongoCollectionCriteria())->setRecoverPasswordToken($data['token']);
+        /** @var $userService  UserModelInterface */
+        $userService = $this->model()->get(UserModelService::class);
+        $result = $userService->find($criteria);
+
+        if ($result->count() == 1) {
+            /** @var $user UserInterface */
+            $user = $result->current();
+            $user->setPassword($data['password']);
+            $user->save();
+
+            if ($this->getResponse() instanceof Response) {
+                $this->getResponse()->setStatusCode(204);
+            }
+            return new JsonModel();
+        }
+
+        if ($result->count() > 1) {
+            return new ApiProblemModel(new ApiProblem(409, 'Ambitious token'));
+        }
+
+        return new ApiProblemModel(new ApiProblem(404, 'Token not found'));
     }
 
     /**
