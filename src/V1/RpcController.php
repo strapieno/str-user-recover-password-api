@@ -58,7 +58,7 @@ class RpcController extends ApigilityRpcController
                     get_class($user),
                     'Strapieno\ModelUtils\Entity\RercoverPasswordAwareInterface'
                 );
-                return new ApiProblemModel(new ApiProblem(500, $message);
+                return new ApiProblemModel(new ApiProblem(500, $message));
             }
             $user->generateRecoverPasswordToken();
             $user->save();
@@ -98,7 +98,7 @@ class RpcController extends ApigilityRpcController
                     get_class($user),
                     'Strapieno\ModelUtils\Entity\PasswordAwareInterface'
                 );
-                return new ApiProblemModel(new ApiProblem(500, $message);
+                return new ApiProblemModel(new ApiProblem(500, $message));
             }
 
             $user->setPassword($data['password']);
