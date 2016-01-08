@@ -3,12 +3,12 @@
 namespace Strapieno\UserRecoverPassword\Api\V1;
 
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
-use Strapieno\ModelUtils\Entity\PasswordAwareInterface;
-use Strapieno\ModelUtils\Entity\RercoverPasswordAwareInterface;
 use Strapieno\User\Model\Criteria\Mongo\UserMongoCollectionCriteria;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\User\Model\UserModelInterface;
 use Strapieno\User\Model\UserModelService;
+use Strapieno\Utils\Model\Entity\PasswordAwareInterface;
+use Strapieno\Utils\Model\Entity\RercoverPasswordAwareInterface;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\Http\Response;
 use Zend\InputFilter\InputFilter;
@@ -56,7 +56,7 @@ class RpcController extends ApigilityRpcController
                 $message = sprintf(
                     'Class %s must be an instance of %s',
                     get_class($user),
-                    'Strapieno\ModelUtils\Entity\RercoverPasswordAwareInterface'
+                    'Strapieno\Utils\Model\Entity\RercoverPasswordAwareInterface'
                 );
                 return new ApiProblemModel(new ApiProblem(500, $message));
             }
@@ -96,7 +96,7 @@ class RpcController extends ApigilityRpcController
                 $message = sprintf(
                     'Class %s must be an instance of %s',
                     get_class($user),
-                    'Strapieno\ModelUtils\Entity\PasswordAwareInterface'
+                    'Strapieno\Utils\Model\Entity\PasswordAwareInterface'
                 );
                 return new ApiProblemModel(new ApiProblem(500, $message));
             }

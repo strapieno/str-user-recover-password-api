@@ -41,6 +41,6 @@ class ResetPasswordInputFilterFactory implements FactoryInterface
         $inputFilter->add($input);
 
         $input = (new Input('token'))->setRequired(true);
-        return $inputFilter->add($input);
+        return $inputFilter->add($input );
     }
 }

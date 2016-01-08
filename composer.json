@@ -9,7 +9,7 @@
     "matryoshka-model/zf2-matryoshka-module": "0.8.*@dev",
     "strapieno/str-auth-model" : "dev-develop",
     "strapieno/str-user-model" : "dev-develop",
-    "strapieno/str-model-utils" : "dev-develop"
+    "strapieno/str-utils" : "dev-develop"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.7",
@@ -40,7 +40,7 @@
     },
     {
       "type": "vcs",
-      "url": "git@github.com:strapieno/str-model-utils.git"
+      "url": "git@github.com:strapieno/str-utils.git"
     }
   ],
   "authors": [
