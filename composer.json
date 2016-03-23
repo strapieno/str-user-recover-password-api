@@ -19,7 +19,7 @@
   "autoload": {
     "psr-4": {
       "Strapieno\\UserRecoverPassword\\Api\\": "src/",
-      "Strapieno\\UserRecoverPassword\\Api\\": "tests/"
+      "Strapieno\\UserRecoverPassword\\ApiTest\\": "tests/"
     },
     "classmap": [
       "./Module.php"
