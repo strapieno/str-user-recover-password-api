@@ -7,9 +7,7 @@
     "matryoshka-model/matryoshka": "0.8.*@dev",
     "matryoshka-model/mongo-wrapper": "0.8.*@dev",
     "matryoshka-model/zf2-matryoshka-module": "0.8.*@dev",
-    "strapieno/str-auth-model" : "dev-develop",
-    "strapieno/str-user-model" : "dev-develop",
-    "strapieno/str-utils" : "dev-develop"
+    "strapieno/str-auth-model" : "dev-develop"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.7",
@@ -29,18 +27,6 @@
     {
       "type": "vcs",
       "url": "git@github.com:matryoshka-model/zf-apigility-matryoshka.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:strapieno/str-auth-model.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:strapieno/str-user-model.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:strapieno/str-utils.git"
     }
   ],
   "authors": [
@@ -48,16 +34,7 @@
       "name": "Antonio Visalli",
       "email": "antonino.visalli@gmail.com",
       "homepage": "http://github.com/visa4"
-    },
-    {
-      "name": "Leonardo Di Donato",
-      "email": "leodidonato@gmail.com",
-      "homepage": "http://github.com/leodido"
-    },
-    {
-      "name": "Leonardo Grasso",
-      "email": "me@leonardograsso.com",
-      "homepage": "http://github.com/leogr"
     }
-  ]
+  ],
+  "minimum-stability": "dev"
 }
