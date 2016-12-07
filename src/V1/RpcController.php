@@ -40,7 +40,7 @@ class RpcController extends ApigilityRpcController
         $adapter = $this->getOauthStorageAdapter($sm);
 
         $identityField = $adapter->getIdentityField();
-        $identityValue = $inputFilter->get($identityField)->getValue();
+        $identityValue = $inputFilter->get('identity')->getValue();
         /** @var $userService  UserModelInterface */
         $userService = $this->model()->get(UserModelService::class);
 

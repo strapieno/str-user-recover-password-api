@@ -74,13 +74,26 @@ return [
             ]
         ]
     ],
-    'zf-content-validation' => [
-        'Strapieno\UserRecoverPassword\Api\V1\RecoverRpcController' => [
-            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter'
+    'strapieno_input_filter_specs' => [
+        'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter' => [
+            'identity' => [
+                'name' => 'identity',
+                'require' => true,
+                'allow_empty' => false
+            ]
         ],
-        'Strapieno\UserRecoverPassword\Api\V1\ResetRpcController' => [
-            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter    '
+        'Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter' => [
+            'identity' => [
+                'name' => 'token',
+                'require' => true,
+                'allow_empty' => false
+            ],
+            'password' => [
+                'name' => 'password',
+                'require' => true,
+                'allow_empty' => false
+            ]
         ]
-    ],
+    ]
 ];
 
