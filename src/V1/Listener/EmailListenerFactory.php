@@ -20,17 +20,17 @@ class EmailListenerFactory implements FactoryInterface
 
         $config = $serviceLocator->get('Config');
 
-        if (!isset($config['user_listener']['template'])) {
+        if (!isset($config['email-setting']['recover-password-template'])) {
            throw new ServiceNotCreatedException('Template not set in EmailListenerFactory');
         }
 
-        if (!isset($config['user_listener']['recover-password-subject'])) {
+        if (!isset($config['email-setting']['recover-password-subject'])) {
             throw new ServiceNotCreatedException('Subject not set in EmailListenerFactory');
         }
 
         $listener = new EmailListener();
-        $listener->setSubject($config['user_listener']['recover-password-subject']);
-        $listener->setTemplate($config['user_listener']['template']);
+        $listener->setSubject($config['email-setting']['recover-password-subject']);
+        $listener->setTemplate($config['email-setting']['recover-password-template']);
         return $listener;
     }
 }
