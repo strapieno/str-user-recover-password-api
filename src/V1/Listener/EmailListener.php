@@ -45,16 +45,14 @@ class EmailListener implements ListenerAggregateInterface, ServiceLocatorAwareIn
     /**
      * @param Event $e
      */
-    public function sendValidationMail(Event $e)
+    public function sendValidationMail(ModelEvent $e)
     {
-        $hal = $e->getParam('entity');
-        if ($hal instanceof Entity
-            && ($user = $hal->entity)
-            && $user instanceof IdentityExistAwareInterface
-            && $user instanceof ActiveRecordInterface
-            && $user instanceof UserInterface)
+        $entity = $e->getData();
+        if ($entity instanceof IdentityExistAwareInterface
+            && $entity instanceof ActiveRecordInterface
+            && $entity instanceof UserInterface)
         {
-            $message = $this->getMessage($user);
+            $message = $this->getMessage($entity);
             $this->getServiceLocator()->get('MailMan\Service\MailInterface')->send($message);
         }
     }
