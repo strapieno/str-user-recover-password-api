@@ -74,6 +74,14 @@ return [
             ]
         ]
     ],
+    'zf-content-validation' => [
+        'Strapieno\UserRecoverPassword\Api\V1\RecoverRpcController' => [
+            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter'
+        ],
+        'Strapieno\UserRecoverPassword\Api\V1\ResetRpcController' => [
+            'input_filter' => 'Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter'
+        ]
+    ],
     'strapieno_input_filter_specs' => [
         'Strapieno\UserRecoverPassword\Api\V1\InputFilter\GenerateTokenInputFilter' => [
             'identity' => [
