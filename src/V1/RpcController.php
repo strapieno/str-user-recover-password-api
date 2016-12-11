@@ -1,5 +1,4 @@
 <?php
-
 namespace Strapieno\UserRecoverPassword\Api\V1;
 
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
