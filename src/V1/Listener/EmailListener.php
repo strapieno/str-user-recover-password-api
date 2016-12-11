@@ -2,6 +2,7 @@
 namespace Strapieno\UserRecoverPassword\Api\V1\Listener;
 
 use MailMan\Message;
+use Matryoshka\Model\ModelEvent;
 use Matryoshka\Model\Object\ActiveRecord\ActiveRecordInterface;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\Utils\Model\Entity\IdentityExistAwareInterface;
@@ -38,7 +39,7 @@ class EmailListener implements ListenerAggregateInterface, ServiceLocatorAwareIn
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('create.post', [$this, 'sendValidationMail']);
+        $this->listeners[] = $events->attach(ModelEvent::EVENT_SAVE_POST, [$this, 'sendValidationMail']);
     }
 
     /**
