@@ -5,11 +5,13 @@ use MailMan\Message;
 use Matryoshka\Model\ModelEvent;
 use Matryoshka\Model\Object\ActiveRecord\ActiveRecordInterface;
 use Strapieno\User\Model\Entity\UserInterface;
+use Strapieno\UserRecoverPassword\Api\V1\RpcController;
 use Strapieno\Utils\Model\Entity\IdentityExistAwareInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -52,8 +54,12 @@ class EmailListener implements ListenerAggregateInterface, ServiceLocatorAwareIn
             && $entity instanceof ActiveRecordInterface
             && $entity instanceof UserInterface)
         {
-            $message = $this->getMessage($entity);
-            $this->getServiceLocator()->get('MailMan\Service\MailInterface')->send($message);
+            /** @var $routerMatch RouteMatch */
+            $routerMatch = $this->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+            if ($routerMatch->getParam('controller') == 'Strapieno\UserRecoverPassword\Api\V1\RecoverRpcController') {
+                $message = $this->getMessage($entity);
+                $this->getServiceLocator()->get('MailMan\Service\MailInterface')->send($message);
+            }
         }
     }
 
