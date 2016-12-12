@@ -83,7 +83,7 @@ class RpcController extends ApigilityRpcController
         $sm = $this->getServiceLocator();
         $data = $inputFilter->getValues();
 
-        $criteria = (new UserMongoCollectionCriteria())->setRecoverPasswordToken($data['token']);
+        $criteria = (new UserMongoCollectionCriteria())->setRecoverPasswordToken($e->getRouteMatch()->getParam('token'));
         /** @var $userService  UserModelInterface */
         $userService = $this->model()->get(UserModelService::class);
         $result = $userService->find($criteria);
