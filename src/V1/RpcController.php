@@ -4,6 +4,7 @@ namespace Strapieno\UserRecoverPassword\Api\V1;
 use Matryoshka\Model\Object\IdentityAwareInterface;
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
 use Strapieno\User\Model\Criteria\Mongo\UserMongoCollectionCriteria;
+use Strapieno\User\Model\Entity\State\Registered;
 use Strapieno\User\Model\Entity\State\UserStateAwareInterface;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\User\Model\UserModelInterface;
@@ -106,7 +107,7 @@ class RpcController extends ApigilityRpcController
                 $user->setRecoverPasswordToken(null);
             }
 
-            if ($user instanceof UserStateAwareInterface && $user->getState() == 'registered') {
+            if ($user instanceof UserStateAwareInterface && $user->getState() instanceof Registered) {
                 $user->validated();
             }
 
