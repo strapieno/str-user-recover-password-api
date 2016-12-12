@@ -24,11 +24,14 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/reset-password',
+                            'route' => '/reset-password/:token',
                             'defaults' => [
                                 'controller' => 'Strapieno\UserRecoverPassword\Api\V1\ResetRpcController',
                                 'action' => 'resetPassword'
                             ],
+                            'constraints' => [
+                                'token' => '[0-9a-zA-Z-_]{32}'
+                            ]
                         ]
                     ]
                 ]
@@ -91,11 +94,6 @@ return [
             ]
         ],
         'Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter' => [
-            'identity' => [
-                'name' => 'token',
-                'require' => true,
-                'allow_empty' => false
-            ],
             'password' => [
                 'name' => 'password',
                 'require' => true,
