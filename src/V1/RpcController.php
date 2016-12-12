@@ -1,8 +1,10 @@
 <?php
 namespace Strapieno\UserRecoverPassword\Api\V1;
 
+use Matryoshka\Model\Object\IdentityAwareInterface;
 use Strapieno\Auth\Model\OAuth2\AdapterInterface;
 use Strapieno\User\Model\Criteria\Mongo\UserMongoCollectionCriteria;
+use Strapieno\User\Model\Entity\State\UserStateAwareInterface;
 use Strapieno\User\Model\Entity\UserInterface;
 use Strapieno\User\Model\UserModelInterface;
 use Strapieno\User\Model\UserModelService;
@@ -98,6 +100,14 @@ class RpcController extends ApigilityRpcController
                     'Strapieno\Utils\Model\Entity\PasswordAwareInterface'
                 );
                 return new ApiProblemModel(new ApiProblem(500, $message));
+            }
+
+            if ($user instanceof RercoverPasswordAwareInterface) {
+                $user->setRecoverPasswordToken(null);
+            }
+
+            if ($user instanceof UserStateAwareInterface && $user->getState() == 'registered') {
+                $user->validated();
             }
 
             $user->setPassword($data['password']);
