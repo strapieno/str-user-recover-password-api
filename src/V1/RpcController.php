@@ -78,13 +78,7 @@ class RpcController extends ApigilityRpcController
      */
     public function resetPassword(MvcEvent $e)
     {
-        $inputFilter = $e->getParam('ZF\ContentValidation\InputFilter');
-        if (!$inputFilter instanceof InputFilter) {
-            return new ApiProblemModel(new ApiProblem(500, 'Missing InputFilter; cannot validate request'));
-        }
-
         $sm = $this->getServiceLocator();
-        $data = $inputFilter->getValues();
 
         $criteria = (new UserMongoCollectionCriteria())->setRecoverPasswordToken($e->getRouteMatch()->getParam('token'));
         /** @var $userService  UserModelInterface */
@@ -92,14 +86,16 @@ class RpcController extends ApigilityRpcController
         $result = $userService->find($criteria);
 
         if ($result->count() == 1) {
+
+            $data = $this->getResetPasswordData($e);
+            if ($data instanceof ApiProblemModel) {
+                return $data;
+            }
+
             /** @var $user UserInterface */
             $user = $result->current();
             if (!$user instanceof PasswordAwareInterface) {
-                $message = sprintf(
-                    'Class %s must be an instance of %s',
-                    get_class($user),
-                    'Strapieno\Utils\Model\Entity\PasswordAwareInterface'
-                );
+                $message = sprintf('Class %s must be an instance of %s', get_class($user), PasswordAwareInterface::class);
                 return new ApiProblemModel(new ApiProblem(500, $message));
             }
 
@@ -139,9 +135,56 @@ class RpcController extends ApigilityRpcController
             && ($adapter = $sm->get('Strapieno\Auth\Model\OAuth2\StorageAdapter'))
             && !($adapter instanceof AdapterInterface)
         ) {
-            // TODO Exception
+            return new ApiProblemModel(
+                new ApiProblem(500, 'Missing Oauth2 storage or wrong interface given')
+            );
+        }
+        return $adapter;
+    }
+
+    /**
+     * @param MvcEvent $e
+     * @return array|ApiProblemModel
+     */
+    protected function getResetPasswordData(MvcEvent $e)
+    {
+        $manager = $this->getServiceLocator()->get('InputFilterManager');
+        $config = $this->getServiceLocator()->get('Config');
+
+        $inputFilter = null;
+        if (isset($config['reset-password-inputfilter']) && $config['reset-password-inputfilter'] == 'user') {
+            $inputFilterUser = $manager->get('Strapieno\User\Model\InputFilter\DefaultInputFilter');
+
+            if ($inputFilterUser->has('password')) {
+
+                $inputFilter = new InputFilter();
+                $inputFilter->add($inputFilterUser->get('password'));
+            } else {
+                return new ApiProblemModel(new ApiProblem(500, 'Missing Input password; cannot validate request'));
+            }
         }
 
-        return $adapter;
+        if ($inputFilter == null && $manager->has('Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter')) {
+            $inputFilter = $manager->get('Strapieno\UserRecoverPassword\Api\V1\InputFilter\ResetPasswordInputFilter');
+        }
+
+        if ($inputFilter == null) {
+            if (!$inputFilter instanceof InputFilter) {
+                return new ApiProblemModel(new ApiProblem(500, 'Missing InputFilter; cannot validate request'));
+            }
+        }
+
+        /** @var $data ParameterDataContainer */
+        $data = $e->getParam('ZFContentNegotiationParameterData')->getBodyParams();
+
+        $inputFilter->setData($data);
+        if (!$inputFilter->isValid()) {
+            return new ApiProblemModel(
+                new ApiProblem(422, 'Failed Validation', null, null, [
+                    'validation_messages' => $inputFilter->getMessages(),
+                ])
+            );
+        }
+        return  $inputFilter->getValues();
     }
 }
